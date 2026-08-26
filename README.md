@@ -23,7 +23,7 @@
 ## 폴더 구조
 
 ```
-├─ css/style.css          전체 스타일 (PC 전용, 컨테이너 1100px)
+├─ css/style.css          전체 스타일 (PC 전용, 컨테이너 1250px)
 ├─ js/
 │  ├─ config.js           Supabase 접속 정보 (git 제외 / Actions 가 생성)
 │  ├─ config.sample.js    설정 파일 예시

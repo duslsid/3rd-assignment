@@ -2,7 +2,7 @@
 
 /* =========================================================
    RUNNERS - 러닝 의류 쇼핑몰
-   PC 전용 (반응형 없음 / 기준 폭 1100px 컨테이너)
+   PC 전용 (반응형 없음 / 기준 폭 1250px 컨테이너)
    ========================================================= */
 
 :root {
@@ -64,7 +64,7 @@ table {
 
 /* ---------- 컨테이너 ---------- */
 .container {
-  width: 1100px;
+  width: 1250px;
   margin: 0 auto;
 }
 
@@ -420,17 +420,19 @@ table {
   padding-bottom: 120px;
 }
 
+/* 300px 이미지 4개를 컨테이너(1250px) 안에 균등 배치 */
 .mag-grid {
   display: grid;
-  grid-template-columns: repeat(3, 300px);
-  column-gap: 100px;
+  grid-template-columns: repeat(4, 300px);
+  justify-content: space-between;
   row-gap: 50px;
 }
 
 .mag-card img {
   width: 300px;
   height: 300px;
-  object-fit: cover;
+  object-fit: contain;
+  background: var(--white);
   margin-bottom: 20px;
 }
 
@@ -580,7 +582,7 @@ table {
 
 .detail-info {
   margin-left: 24px;
-  width: 494px; /* 컨테이너 1100px - (미니 60 + 8 + 메인 490 + 24) */
+  width: 644px; /* 컨테이너 1250px - (미니 60 + 8 + 메인 490 + 24) */
   flex: 0 0 auto;
 }
 
@@ -794,13 +796,14 @@ table {
 .mag-row img {
   width: 150px;
   height: 150px;
-  object-fit: cover;
+  object-fit: contain;
+  background: var(--white);
   flex: 0 0 auto;
 }
 
 .mag-row-text {
   margin-left: 20px;
-  width: 870px;
+  width: 1020px; /* 컨테이너 1250px - 좌우 여백 60 - 이미지 150 - 여백 20 */
 }
 
 .mag-row-title {
@@ -845,7 +848,8 @@ table {
 .article-body img.article-thumb {
   width: 200px;
   height: 200px;
-  object-fit: cover;
+  object-fit: contain;
+  background: var(--white);
   float: left;
   margin: 0 20px 20px 0;
 }
