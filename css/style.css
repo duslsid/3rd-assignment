@@ -1,0 +1,1106 @@
+@charset "utf-8";
+
+/* =========================================================
+   RUNNERS - 러닝 의류 쇼핑몰
+   PC 전용 (반응형 없음 / 기준 폭 1100px 컨테이너)
+   ========================================================= */
+
+:root {
+  --point: #ebf400;
+  --dark: #1d1d1d;
+  --white: #ffffff;
+  --header-h: 106px; /* 홍보띠 40 + 구분선 1 + 메뉴바 65 */
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-width: 1360px; /* 1200px 이하로 좁히면 가로 스크롤이 생기고 내용은 찌그러지지 않는다 */
+}
+
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  color: var(--dark);
+  background: var(--white);
+  padding-top: var(--header-h);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  display: block;
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+  color: inherit;
+}
+
+button {
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+/* ---------- 컨테이너 ---------- */
+.container {
+  width: 1100px;
+  margin: 0 auto;
+}
+
+/* ---------- 글꼴 정의 ---------- */
+.font-menu {
+  font-size: 18px;
+  font-weight: 300;
+  color: var(--white);
+}
+
+.font-submenu {
+  font-size: 16px;
+  font-weight: 300;
+  color: var(--white);
+}
+
+.font-promo {
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--white);
+}
+
+.font-content {
+  font-size: 30px;
+  font-weight: 500;
+  color: var(--dark);
+}
+
+.font-pname {
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--dark);
+}
+
+.font-price {
+  font-size: 15px;
+  font-weight: 300;
+  color: var(--dark);
+}
+
+/* =========================================================
+   헤더 (홍보띠 + 메뉴바)
+   ========================================================= */
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  min-width: 1360px;
+  z-index: 1000;
+}
+
+/* ---------- 홍보띠 ---------- */
+.promo {
+  position: relative;
+  height: 40px;
+  background: var(--dark);
+  overflow: hidden;
+  transition: height 0.4s ease, opacity 0.4s ease;
+}
+
+.promo-list {
+  position: relative;
+  height: 40px;
+}
+
+.promo-item {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  opacity: 0;
+}
+
+/* 0.5초 slideInUp -> 3초 유지 -> 0.5초 fadeOut */
+.promo-item.on {
+  animation: promoCycle 4s linear forwards;
+}
+
+@keyframes promoCycle {
+  0% {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  12.5% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  87.5% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(0);
+  }
+}
+
+/* 홍보띠와 메뉴바 사이 구분선 */
+.header-line {
+  height: 1px;
+  background: var(--white);
+  transition: opacity 0.4s ease;
+}
+
+/* 스크롤을 내리면 홍보띠가 사라지고, 올리면 다시 나타난다 */
+.header.promo-hidden .promo {
+  height: 0;
+  opacity: 0;
+}
+
+.header.promo-hidden .header-line {
+  opacity: 0;
+}
+
+/* ---------- 메뉴바 ---------- */
+.gnb {
+  position: relative;
+  height: 65px;
+  background: var(--dark);
+}
+
+.gnb-home {
+  position: absolute;
+  top: 50%;
+  left: 52px;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+}
+
+.gnb-home svg {
+  display: block;
+}
+
+.gnb-spot {
+  position: absolute;
+  top: 50%;
+  right: 52px;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+}
+
+.gnb-spot .bar {
+  margin: 0 10px;
+}
+
+.gnb-menu {
+  display: flex;
+  justify-content: center;
+  height: 65px;
+}
+
+.menu-item {
+  position: relative;
+}
+
+.menu-item > a {
+  display: flex;
+  align-items: center;
+  height: 65px;
+  padding: 0 30px;
+}
+
+/* ---------- 하위 메뉴창 ---------- */
+.submenu {
+  position: absolute;
+  top: 65px;
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 100%;
+  background: rgba(29, 29, 29, 0.8); /* #1D1D1DCC */
+  border-top: 1px solid var(--white); /* 메뉴바와 하위 메뉴 사이 구분선 */
+  padding: 20px 100px;
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: max-height 0.5s ease, opacity 0.5s ease, padding 0.5s ease, visibility 0s linear 0.5s;
+}
+
+.menu-item:hover .submenu {
+  max-height: 400px;
+  opacity: 1;
+  visibility: visible;
+  transition: max-height 0.5s ease, opacity 0.5s ease, padding 0.5s ease, visibility 0s;
+}
+
+.submenu li + li {
+  margin-top: 16px;
+}
+
+.submenu a {
+  display: block;
+  white-space: nowrap;
+  text-align: center;
+}
+
+/* =========================================================
+   TOP 버튼
+   ========================================================= */
+.top-btn {
+  position: fixed;
+  right: 40px;
+  bottom: 40px;
+  width: 50px;
+  height: 50px;
+  background: var(--dark);
+  color: var(--white);
+  font-size: 13px;
+  font-weight: 300;
+  z-index: 900;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0s linear 0.3s;
+}
+
+.top-btn.show {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.3s ease, visibility 0s;
+}
+
+/* =========================================================
+   메인 페이지 - 메인 이미지 & 로고
+   ========================================================= */
+.hero {
+  position: relative;
+  width: 100%;
+  height: 800px;
+  overflow: hidden;
+  background: var(--dark);
+}
+
+.hero-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+}
+
+.hero-logo {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 270px;
+  height: 80px;
+  object-fit: contain;
+  z-index: 10;
+}
+
+/* ---------- 메인 문구 ---------- */
+.main-slogan {
+  margin-top: 100px;
+  text-align: center;
+  font-size: 50px;
+  font-weight: 700;
+  color: var(--dark);
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+
+/* =========================================================
+   베스트 상품 리스트
+   ========================================================= */
+.best {
+  margin-top: 150px;
+}
+
+.section-title {
+  text-align: left;
+}
+
+.section-gap {
+  height: 20px;
+}
+
+.best-viewport {
+  overflow: hidden;
+}
+
+.best-track {
+  display: flex;
+  width: max-content;
+  animation: bestFlow linear infinite;
+}
+
+.best-viewport:hover .best-track {
+  animation-play-state: paused;
+}
+
+@keyframes bestFlow {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(var(--flow-distance));
+  }
+}
+
+.best-item {
+  position: relative;
+  width: 290px;
+  margin-right: 40px;
+  flex: 0 0 auto;
+}
+
+/* 이미지 간 간격 40px 의 중앙에 구분선 */
+.best-item::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: -20px;
+  width: 1px;
+  height: 100%;
+  background: var(--dark);
+}
+
+.best-rank {
+  margin-bottom: 20px;
+  line-height: 1;
+}
+
+.best-price {
+  margin-bottom: 20px;
+}
+
+.best-img {
+  width: 290px;
+  height: 370px;
+  object-fit: contain;
+  background: var(--white);
+}
+
+.best-item:hover .best-name,
+.best-item:hover .best-price {
+  text-decoration: underline;
+}
+
+/* =========================================================
+   메인 - 매거진
+   ========================================================= */
+.magazine-home {
+  margin-top: 50px;
+  padding-bottom: 120px;
+}
+
+.mag-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 300px);
+  column-gap: 100px;
+  row-gap: 50px;
+}
+
+.mag-card img {
+  width: 300px;
+  height: 300px;
+  object-fit: cover;
+  margin-bottom: 20px;
+}
+
+.mag-card-title {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.mag-card:hover .mag-card-title {
+  text-decoration: underline;
+}
+
+/* =========================================================
+   푸터
+   ========================================================= */
+.footer {
+  width: 100%;
+  background: var(--dark);
+  padding: 40px 0;
+}
+
+.footer-inner {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.footer-cs {
+  margin-bottom: 25px;
+  line-height: 1.6;
+}
+
+.footer-links {
+  margin-bottom: 25px;
+}
+
+.footer-links .bar {
+  margin: 0 8px;
+}
+
+.footer-info {
+  line-height: 1.7;
+}
+
+.footer-logo {
+  width: 270px;
+  height: 80px;
+  object-fit: contain;
+}
+
+/* =========================================================
+   하위 메뉴 페이지 (상품 목록)
+   ========================================================= */
+.page-head {
+  margin-top: 80px;
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+.page-head .sub {
+  margin-top: 10px;
+}
+
+/* 300px 이미지 4개 + 여백 40px = 1320px (컨테이너보다 넓게 중앙 배치) */
+.product-grid {
+  width: 1320px;
+  margin: 0 auto 120px;
+  display: grid;
+  grid-template-columns: repeat(4, 300px);
+  gap: 60px 40px;
+  justify-content: center;
+}
+
+.product-card {
+  text-align: center;
+}
+
+.product-card img {
+  width: 300px;
+  height: 300px;
+  object-fit: contain;
+  background: var(--white);
+  margin-bottom: 16px;
+}
+
+.product-card .name {
+  margin-bottom: 6px;
+}
+
+.product-card:hover .name,
+.product-card:hover .price {
+  text-decoration: underline;
+}
+
+.empty-msg {
+  margin: 120px 0;
+  text-align: center;
+}
+
+/* =========================================================
+   상품 상세 페이지
+   ========================================================= */
+.detail-top {
+  display: flex;
+  align-items: flex-start;
+  margin-top: 60px;
+  margin-bottom: 200px;
+}
+
+/* 스크롤을 내려도 고정되고, 상세 영역(추가 정보)이 끝나면 고정이 풀린다 */
+.detail-visual {
+  position: sticky;
+  top: 85px;
+  display: flex;
+  align-items: flex-start;
+  flex: 0 0 auto;
+}
+
+.detail-thumbs {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-right: 8px;
+}
+
+.detail-thumbs img {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  background: var(--white);
+  border: 1px solid #e5e5e5;
+  cursor: pointer;
+}
+
+.detail-thumbs img.active {
+  border-color: var(--dark);
+}
+
+.detail-main-img {
+  width: 490px;
+  height: 610px;
+  object-fit: contain;
+  background: var(--white);
+}
+
+.detail-info {
+  margin-left: 24px;
+  width: 310px;
+  flex: 0 0 auto;
+}
+
+.detail-name {
+  margin-bottom: 10px;
+}
+
+.detail-price {
+  margin-bottom: 30px;
+}
+
+.size-head {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.size-guide-btn {
+  margin-left: 40px;
+  text-decoration: underline;
+}
+
+.size-list {
+  display: grid;
+  grid-template-columns: repeat(4, 70px);
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+.size-btn {
+  width: 70px;
+  height: 45px;
+  border: 1px solid var(--dark);
+  border-radius: 6px;
+  background: var(--white);
+}
+
+.size-btn.selected {
+  background: var(--dark);
+  color: var(--white);
+}
+
+.size-empty {
+  margin-bottom: 30px;
+}
+
+.detail-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.btn-cart,
+.btn-wish {
+  width: 310px;
+  height: 65px;
+}
+
+.btn-cart {
+  background: var(--dark);
+  color: var(--white);
+}
+
+.btn-wish {
+  background: var(--white);
+  color: var(--dark);
+  border: 1px solid var(--dark);
+}
+
+.detail-desc {
+  margin-top: 100px;
+  white-space: pre-line;
+  line-height: 1.8;
+}
+
+.detail-extra {
+  margin-top: 30px;
+}
+
+.extra-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.extra-body {
+  display: none;
+  margin-top: 12px;
+  white-space: pre-line;
+  line-height: 1.8;
+}
+
+.extra-body.open {
+  display: block;
+}
+
+/* 추천 상품 : 300px 4개 + 여백 15px = 1245px */
+.recommend-title {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.recommend-list {
+  width: 1245px;
+  margin: 0 auto 120px;
+  display: grid;
+  grid-template-columns: repeat(4, 300px);
+  gap: 15px;
+  justify-content: center;
+}
+
+.recommend-list img {
+  width: 300px;
+  height: 300px;
+  object-fit: contain;
+  background: var(--white);
+  border-radius: 8px;
+}
+
+/* =========================================================
+   레이어 팝업
+   ========================================================= */
+.layer {
+  position: fixed;
+  inset: 0;
+  background: rgba(29, 29, 29, 0.6);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.layer.open {
+  display: flex;
+}
+
+.layer-box {
+  background: var(--white);
+  width: 560px;
+  max-height: 80vh;
+  overflow-y: auto;
+  padding: 30px;
+}
+
+.layer-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.layer-close {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.layer-box img {
+  width: 100%;
+  height: auto;
+}
+
+.layer-field {
+  margin-bottom: 16px;
+}
+
+.layer-field label {
+  display: block;
+  margin-bottom: 6px;
+}
+
+.layer-field input {
+  width: 100%;
+  height: 40px;
+  border: 1px solid var(--dark);
+  padding: 0 10px;
+  font-size: 15px;
+  font-weight: 300;
+}
+
+.layer-btn {
+  width: 100%;
+  height: 45px;
+  background: var(--dark);
+  color: var(--white);
+  font-size: 14px;
+  font-weight: 300;
+}
+
+.layer-msg {
+  margin-top: 12px;
+  line-height: 1.6;
+}
+
+/* =========================================================
+   매거진 목록 페이지
+   ========================================================= */
+.mag-list {
+  margin-top: 200px;
+  padding: 0 30px 120px;
+}
+
+.mag-row {
+  display: flex;
+  align-items: flex-start;
+}
+
+.mag-row + .mag-row {
+  margin-top: 50px;
+}
+
+.mag-row img {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  flex: 0 0 auto;
+}
+
+.mag-row-text {
+  margin-left: 20px;
+  width: 870px;
+}
+
+.mag-row-title {
+  margin-bottom: 12px;
+}
+
+.mag-row-preview {
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: 1.6;
+}
+
+.mag-row:hover .mag-row-title,
+.mag-row:hover .mag-row-preview {
+  text-decoration: underline;
+}
+
+/* =========================================================
+   매거진 전문 페이지
+   ========================================================= */
+.article {
+  margin-top: 50px;
+  padding-bottom: 120px;
+}
+
+.article-title {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.article-subtitle {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.article-body {
+  line-height: 1.9;
+}
+
+.article-body img.article-thumb {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  float: left;
+  margin: 0 20px 20px 0;
+}
+
+.article-body p {
+  margin-bottom: 20px;
+}
+
+.article-body blockquote {
+  margin: 20px 0;
+  padding-left: 16px;
+  border-left: 2px solid var(--dark);
+}
+
+/* =========================================================
+   로그인 페이지
+   ========================================================= */
+.login-wrap {
+  min-height: calc(100vh - var(--header-h));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-card {
+  width: 520px;
+  height: 460px;
+  border: 1px solid var(--dark);
+  padding: 0 90px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.login-label {
+  margin-bottom: 8px;
+}
+
+.login-input {
+  width: 340px;
+  height: 40px;
+  border: 0;
+  border-bottom: 1px solid var(--dark);
+  font-size: 14px;
+  font-weight: 300;
+  background: transparent;
+}
+
+.login-input:focus {
+  outline: none;
+  border-bottom-width: 3px;
+}
+
+.gap-20 {
+  height: 20px;
+}
+
+.gap-30 {
+  height: 30px;
+}
+
+.login-remember {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+.login-remember input {
+  width: 20px;
+  height: 20px;
+  margin: 0;
+}
+
+.login-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.login-buttons button {
+  width: 150px;
+  height: 40px;
+  background: var(--dark);
+}
+
+.login-find {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-find .bar {
+  margin: 0 12px;
+}
+
+.login-find button {
+  font-size: 15px;
+  font-weight: 300;
+}
+
+.login-msg {
+  margin-top: 16px;
+  text-align: center;
+  min-height: 20px;
+}
+
+/* =========================================================
+   회원가입 페이지
+   ========================================================= */
+.signup {
+  margin: 80px auto 120px;
+  width: 800px;
+}
+
+.signup h2 {
+  margin-bottom: 30px;
+}
+
+.signup-table {
+  width: 100%;
+}
+
+.signup-table th,
+.signup-table td {
+  border-top: 1px solid var(--dark);
+  padding: 18px 10px;
+  text-align: left;
+  vertical-align: top;
+  font-size: 15px;
+  font-weight: 300;
+}
+
+.signup-table tr:last-child th,
+.signup-table tr:last-child td {
+  border-bottom: 1px solid var(--dark);
+}
+
+.signup-table th {
+  width: 170px;
+  font-weight: 500;
+}
+
+.signup-table input[type='text'],
+.signup-table input[type='password'],
+.signup-table select {
+  height: 38px;
+  border: 1px solid var(--dark);
+  padding: 0 10px;
+  font-size: 15px;
+  font-weight: 300;
+  background: var(--white);
+}
+
+.in-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.in-row + .in-row {
+  margin-top: 8px;
+}
+
+.small-btn {
+  height: 38px;
+  padding: 0 14px;
+  background: var(--dark);
+  color: var(--white);
+  font-size: 14px;
+  font-weight: 300;
+}
+
+.hint {
+  margin-top: 6px;
+  font-size: 13px;
+  font-weight: 300;
+  color: #666;
+  line-height: 1.6;
+}
+
+.hint.error {
+  color: #c00;
+}
+
+.hint.ok {
+  color: #1a7f37;
+}
+
+.agree-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.agree-row + .agree-row {
+  margin-top: 10px;
+}
+
+.signup-submit {
+  margin-top: 30px;
+  text-align: center;
+}
+
+.signup-submit button {
+  width: 240px;
+  height: 55px;
+  background: var(--dark);
+  color: var(--white);
+  font-size: 15px;
+  font-weight: 300;
+}
+
+/* =========================================================
+   마이페이지
+   ========================================================= */
+.mypage {
+  margin: 60px auto 120px;
+  width: 1000px;
+}
+
+.mypage-name {
+  margin-bottom: 20px;
+}
+
+.mypage-box {
+  width: 1000px;
+  height: 800px;
+  border: 1px solid var(--dark);
+  padding: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+}
+
+.mypage-box button {
+  font-size: 15px;
+  font-weight: 300;
+}
+
+.mypage-box button:hover {
+  text-decoration: underline;
+}
+
+/* =========================================================
+   준비중 페이지
+   ========================================================= */
+.ready {
+  height: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

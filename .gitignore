@@ -1,0 +1,11 @@
+# Supabase 접속 정보 (GitHub Actions 가 Secrets 로 생성)
+js/config.js
+
+# 빌드 도구 산출물
+tools/data.json
+tools/seed.sql
+tools/seed-*.sql
+
+node_modules/
+.DS_Store
+Thumbs.db

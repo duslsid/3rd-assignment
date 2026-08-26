@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>RUNNERS | 회원가입</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div id="headerSlot"></div>
+
+  <main>
+    <div class="signup">
+      <h2 class="font-content">회원가입</h2>
+
+      <table class="signup-table">
+        <tbody>
+          <tr>
+            <th>이름</th>
+            <td>
+              <input type="text" id="suName" style="width:240px">
+            </td>
+          </tr>
+
+          <tr>
+            <th>아이디</th>
+            <td>
+              <div class="in-row">
+                <input type="text" id="suUserId" style="width:240px" placeholder="4자 이상">
+                <button type="button" class="small-btn" id="btnCheckId">중복검사</button>
+              </div>
+              <p class="hint" id="idHint">2년 이상 로그인 기록이 없으면 휴면계정으로 전환됩니다.</p>
+            </td>
+          </tr>
+
+          <tr>
+            <th>비밀번호</th>
+            <td>
+              <div class="in-row">
+                <input type="text" id="suPw" style="width:240px" placeholder="8자 이상" autocomplete="off">
+              </div>
+              <div class="in-row">
+                <input type="text" id="suPw2" style="width:240px" placeholder="비밀번호 재입력" autocomplete="off">
+              </div>
+              <p class="hint" id="pwHint">비밀번호는 3개월에 한 번씩 변경을 권고합니다. 입력한 문자는 1초 후 점으로 바뀝니다.</p>
+            </td>
+          </tr>
+
+          <tr>
+            <th>전화번호</th>
+            <td>
+              <div class="in-row">
+                <input type="text" id="suPhone" style="width:240px" placeholder="010-0000-0000">
+                <button type="button" class="small-btn" id="btnSendCode">인증번호 받기</button>
+              </div>
+              <div class="in-row">
+                <input type="text" id="suCode" style="width:240px" placeholder="인증번호 6자리">
+                <button type="button" class="small-btn" id="btnVerifyCode">인증확인</button>
+              </div>
+              <p class="hint" id="phoneHint"></p>
+            </td>
+          </tr>
+
+          <tr>
+            <th>이메일</th>
+            <td>
+              <div class="in-row">
+                <input type="text" id="suEmailId" style="width:160px">
+                <span>@</span>
+                <input type="text" id="suEmailDomain" style="width:160px">
+                <select id="suEmailSelect" style="width:150px">
+                  <option value="">직접입력</option>
+                  <option value="naver.com">naver.com</option>
+                  <option value="gmail.com">gmail.com</option>
+                  <option value="daum.net">daum.net</option>
+                  <option value="hanmail.net">hanmail.net</option>
+                  <option value="nate.com">nate.com</option>
+                  <option value="kakao.com">kakao.com</option>
+                </select>
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <th>주소</th>
+            <td>
+              <div class="in-row">
+                <input type="text" id="suZip" style="width:120px" placeholder="우편번호" readonly>
+                <button type="button" class="small-btn" id="btnFindAddr">도로명주소 찾기</button>
+              </div>
+              <div class="in-row">
+                <input type="text" id="suAddr" style="width:400px" placeholder="도로명주소" readonly>
+              </div>
+              <div class="in-row">
+                <input type="text" id="suAddrDetail" style="width:400px" placeholder="상세주소">
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <th>나이</th>
+            <td>
+              <div class="in-row">
+                <input type="text" id="suBirth6" style="width:130px" placeholder="생년월일 6자리" maxlength="6">
+                <span>-</span>
+                <input type="text" id="suBirth1" style="width:50px" maxlength="1">
+                <span class="hint" style="margin:0">●●●●●●</span>
+              </div>
+              <p class="hint" id="ageHint">주민등록번호 앞 7자리를 입력해 주세요.</p>
+            </td>
+          </tr>
+
+          <tr>
+            <th>약관동의</th>
+            <td>
+              <label class="agree-row">
+                <input type="checkbox" id="agreeRequired">
+                <span>[필수] 개인정보 수집 및 이용에 동의합니다.</span>
+              </label>
+              <label class="agree-row">
+                <input type="checkbox" id="agreeMarketing">
+                <span>[선택] 마케팅 정보 수신에 동의합니다.</span>
+              </label>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="signup-submit">
+        <button type="button" id="btnSignupSubmit">가입하기</button>
+        <p class="hint" id="submitHint"></p>
+      </div>
+    </div>
+  </main>
+
+  <div id="footerSlot"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+  <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/db.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/signup.js"></script>
+</body>
+</html>

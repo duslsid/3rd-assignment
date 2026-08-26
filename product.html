@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>RUNNERS | 상품 상세</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div id="headerSlot"></div>
+
+  <main>
+    <div class="container">
+      <div class="detail-top">
+        <!-- 상품 미니 이미지 + 메인 상품 이미지 -->
+        <div class="detail-visual">
+          <div class="detail-thumbs" id="detailThumbs"></div>
+          <img class="detail-main-img" id="detailMainImg" src="" alt="">
+        </div>
+
+        <!-- 상품 정보 -->
+        <div class="detail-info">
+          <p class="detail-name font-price" id="detailName"></p>
+          <p class="detail-price font-price" id="detailPrice"></p>
+
+          <div class="size-head">
+            <span class="font-price">사이즈 선택</span>
+            <button type="button" class="size-guide-btn font-price" id="sizeGuideBtn">사이즈 가이드</button>
+          </div>
+          <div class="size-list" id="sizeList"></div>
+
+          <div class="detail-buttons">
+            <button type="button" class="btn-cart font-price">장바구니</button>
+            <button type="button" class="btn-wish font-price">위시리스트</button>
+          </div>
+
+          <div class="detail-desc font-price" id="detailDesc"></div>
+
+          <div class="detail-extra">
+            <button type="button" class="extra-toggle font-price" id="extraToggle">
+              <span id="extraArrow">∨</span><span>추가 정보</span>
+            </button>
+            <div class="extra-body font-price" id="extraBody"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 추천 상품 -->
+      <p class="recommend-title font-price">러너스의 다양한 제품을 만나보세요</p>
+    </div>
+
+    <div class="recommend-list" id="recommendList"></div>
+  </main>
+
+  <div id="footerSlot"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/db.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/product.js"></script>
+</body>
+</html>
