@@ -35,7 +35,10 @@ function initHero(banners) {
     }, 5000);
   }
 
-  play();
+  // 삽입 직후에는 초기 스타일이 확정되지 않아 첫 fade in 이 생략될 수 있다
+  requestAnimationFrame(function () {
+    requestAnimationFrame(play);
+  });
 }
 
 /* ---------- 베스트 상품 리스트 (오른쪽 -> 왼쪽 흐름) ---------- */

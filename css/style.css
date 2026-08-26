@@ -580,7 +580,7 @@ table {
 
 .detail-info {
   margin-left: 24px;
-  width: 310px;
+  width: 494px; /* 컨테이너 1100px - (미니 60 + 8 + 메인 490 + 24) */
   flex: 0 0 auto;
 }
 
