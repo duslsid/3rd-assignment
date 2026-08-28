@@ -77,7 +77,7 @@ function calcAge(birth6, gender) {
   const pwStore = attachPeekPassword(document.getElementById('suPw'));
   const pw2Store = attachPeekPassword(document.getElementById('suPw2'));
 
-  const state = { idChecked: false, phoneVerified: false, authCode: '' };
+  const state = { idChecked: false };
 
   /* 아이디 중복검사 */
   const userIdInput = document.getElementById('suUserId');
@@ -86,7 +86,7 @@ function calcAge(birth6, gender) {
   userIdInput.addEventListener('input', function () {
     state.idChecked = false;
     idHint.className = 'hint';
-    idHint.textContent = '2년 이상 로그인 기록이 없으면 휴면계정으로 전환됩니다.';
+    idHint.textContent = '';
   });
 
   document.getElementById('btnCheckId').addEventListener('click', async function () {
@@ -103,38 +103,6 @@ function calcAge(birth6, gender) {
     state.idChecked = data.ok;
     idHint.className = 'hint ' + (data.ok ? 'ok' : 'error');
     idHint.textContent = data.message;
-  });
-
-  /* 전화번호 인증 */
-  const phoneHint = document.getElementById('phoneHint');
-
-  document.getElementById('btnSendCode').addEventListener('click', function () {
-    const phone = document.getElementById('suPhone').value.trim();
-
-    if (!phone) {
-      phoneHint.className = 'hint error';
-      phoneHint.textContent = '전화번호를 입력해 주세요.';
-      return;
-    }
-
-    state.authCode = String(Math.floor(100000 + Math.random() * 900000));
-    state.phoneVerified = false;
-    phoneHint.className = 'hint';
-    phoneHint.textContent = '인증번호 ' + state.authCode + ' 가 발송되었습니다. (실습용 화면 표시)';
-  });
-
-  document.getElementById('btnVerifyCode').addEventListener('click', function () {
-    const code = document.getElementById('suCode').value.trim();
-
-    if (!state.authCode) {
-      phoneHint.className = 'hint error';
-      phoneHint.textContent = '먼저 인증번호를 받아 주세요.';
-      return;
-    }
-
-    state.phoneVerified = code === state.authCode;
-    phoneHint.className = 'hint ' + (state.phoneVerified ? 'ok' : 'error');
-    phoneHint.textContent = state.phoneVerified ? '전화번호 인증이 완료되었습니다.' : '인증번호가 일치하지 않습니다.';
   });
 
   /* 이메일 도메인 드롭다운 */
@@ -167,14 +135,14 @@ function calcAge(birth6, gender) {
     }).open();
   });
 
-  /* 나이 표시 */
+  /* 만 나이 표시 */
   const ageHint = document.getElementById('ageHint');
   function updateAge() {
     const age = calcAge(document.getElementById('suBirth6').value.trim(), document.getElementById('suBirth1').value.trim());
 
     if (age === null) {
       ageHint.className = 'hint';
-      ageHint.textContent = '주민등록번호 앞 7자리를 입력해 주세요.';
+      ageHint.textContent = '';
       return;
     }
 
@@ -204,7 +172,6 @@ function calcAge(birth6, gender) {
     if (!state.idChecked) return fail('아이디 중복검사를 진행해 주세요.');
     if (pwStore.value.length < 8) return fail('비밀번호는 8자 이상 입력해 주세요.');
     if (pwStore.value !== pw2Store.value) return fail('비밀번호가 일치하지 않습니다.');
-    if (!state.phoneVerified) return fail('전화번호 인증을 완료해 주세요.');
     if (!document.getElementById('agreeRequired').checked) return fail('필수 약관에 동의해 주세요.');
 
     const { data, error } = await sb.rpc('signup_member', {

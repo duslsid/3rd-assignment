@@ -32,7 +32,7 @@
                 <input type="text" id="suUserId" style="width:240px" placeholder="4자 이상">
                 <button type="button" class="small-btn" id="btnCheckId">중복검사</button>
               </div>
-              <p class="hint" id="idHint">2년 이상 로그인 기록이 없으면 휴면계정으로 전환됩니다.</p>
+              <p class="hint" id="idHint"></p>
             </td>
           </tr>
 
@@ -45,7 +45,6 @@
               <div class="in-row">
                 <input type="text" id="suPw2" style="width:240px" placeholder="비밀번호 재입력" autocomplete="off">
               </div>
-              <p class="hint" id="pwHint">비밀번호는 3개월에 한 번씩 변경을 권고합니다. 입력한 문자는 1초 후 점으로 바뀝니다.</p>
             </td>
           </tr>
 
@@ -54,13 +53,7 @@
             <td>
               <div class="in-row">
                 <input type="text" id="suPhone" style="width:240px" placeholder="010-0000-0000">
-                <button type="button" class="small-btn" id="btnSendCode">인증번호 받기</button>
               </div>
-              <div class="in-row">
-                <input type="text" id="suCode" style="width:240px" placeholder="인증번호 6자리">
-                <button type="button" class="small-btn" id="btnVerifyCode">인증확인</button>
-              </div>
-              <p class="hint" id="phoneHint"></p>
             </td>
           </tr>
 
@@ -101,7 +94,7 @@
           </tr>
 
           <tr>
-            <th>나이</th>
+            <th>생년월일</th>
             <td>
               <div class="in-row">
                 <input type="text" id="suBirth6" style="width:130px" placeholder="생년월일 6자리" maxlength="6">
@@ -109,7 +102,7 @@
                 <input type="text" id="suBirth1" style="width:50px" maxlength="1">
                 <span class="hint" style="margin:0">●●●●●●</span>
               </div>
-              <p class="hint" id="ageHint">주민등록번호 앞 7자리를 입력해 주세요.</p>
+              <p class="hint" id="ageHint"></p>
             </td>
           </tr>
 

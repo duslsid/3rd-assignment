@@ -64,18 +64,22 @@ function renderHeader() {
     '<path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.8V20h13V9.8"/><path d="M10 20v-5.5h4V20"/></svg>';
 
   const menuHtml = MENUS.map(function (m) {
+    return (
+      '<li class="menu-item">' +
+      '<a class="font-menu" href="' + menuHref(m.name) + '">' + esc(m.name) + '</a>' +
+      '</li>'
+    );
+  }).join('');
+
+  // 하위 메뉴는 메뉴별로 따로 열리지 않고, 하나의 창 안에서 각 메뉴 아래에 세로로 표시된다
+  const submenuHtml = MENUS.map(function (m) {
     const subs = m.subs
       .map(function (s) {
         return '<li><a class="font-submenu" href="' + subMenuHref(m.name, s) + '">' + esc(s) + '</a></li>';
       })
       .join('');
 
-    return (
-      '<li class="menu-item">' +
-      '<a class="font-menu" href="' + menuHref(m.name) + '">' + esc(m.name) + '</a>' +
-      '<div class="submenu"><ul>' + subs + '</ul></div>' +
-      '</li>'
-    );
+    return '<ul class="submenu-col">' + subs + '</ul>';
   }).join('');
 
   const promoHtml = PROMO_TEXTS.map(function (t, i) {
@@ -89,10 +93,13 @@ function renderHeader() {
     '<nav class="gnb">' +
     '<a class="gnb-home" href="index.html" aria-label="메인 페이지">' + homeIcon + '</a>' +
     '<ul class="gnb-menu">' + menuHtml + '</ul>' +
+    '<div class="submenu" id="submenu"><div class="submenu-inner">' + submenuHtml + '</div></div>' +
     '<div class="gnb-spot">' +
     '<a class="font-menu" href="signup.html">회원가입</a>' +
     '<span class="font-menu bar">ㅣ</span>' +
     '<a class="font-menu" href="login.html">로그인</a>' +
+    '<span class="font-menu bar">ㅣ</span>' +
+    '<a class="font-menu" href="cart.html">장바구니</a>' +
     '</div>' +
     '</nav>' +
     '</header>'
@@ -119,6 +126,44 @@ function renderFooter(logoUrl) {
     '</div>' +
     '</footer>'
   );
+}
+
+/* ---------- 하위 메뉴창 ----------
+   메뉴별로 각각 열리지 않고 메뉴바 전체 폭의 창 하나가 열리며,
+   메뉴바와 하위 메뉴창 안에 마우스가 머무는 동안은 닫히지 않는다. */
+function initSubmenu() {
+  const menuBar = document.querySelector('.gnb-menu');
+  const submenu = document.getElementById('submenu');
+  if (!menuBar || !submenu) return;
+
+  const items = menuBar.querySelectorAll('.menu-item');
+  const cols = submenu.querySelectorAll('.submenu-col');
+
+  // 각 하위 메뉴 묶음의 폭을 메뉴 항목 폭에 맞춰 자기 메뉴 바로 아래에 오도록 한다
+  function align() {
+    cols.forEach(function (col, i) {
+      if (items[i]) col.style.width = items[i].offsetWidth + 'px';
+    });
+  }
+
+  align();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(align);
+  window.addEventListener('resize', align);
+
+  function open() {
+    submenu.classList.add('open');
+  }
+
+  function leave(e) {
+    const to = e.relatedTarget;
+    if (to && (menuBar.contains(to) || submenu.contains(to))) return;
+    submenu.classList.remove('open');
+  }
+
+  menuBar.addEventListener('mouseenter', open);
+  submenu.addEventListener('mouseenter', open);
+  menuBar.addEventListener('mouseleave', leave);
+  submenu.addEventListener('mouseleave', leave);
 }
 
 /* ---------- 홍보띠 순환 ---------- */
@@ -204,6 +249,89 @@ function closeLayer() {
   if (layer) layer.classList.remove('open');
 }
 
+/* =========================================================
+   장바구니 : 로그인 없이도 브라우저에 저장되고,
+   로그인하면 로그인 전에 담아둔 내역이 회원 장바구니로 합쳐진다.
+   ========================================================= */
+const CART_KEY = 'runnersCart';
+
+/* 로그인 정보 (세션 보관) */
+function getMember() {
+  try {
+    return JSON.parse(sessionStorage.getItem('runnersMember') || 'null');
+  } catch (e) {
+    console.error('[장바구니] 로그인 정보를 읽지 못했습니다.', e);
+    return null;
+  }
+}
+
+/* 비로그인은 공용 키, 로그인은 회원별 키를 사용한다 */
+function cartKey() {
+  const member = getMember();
+  return member && member.userId ? CART_KEY + '_' + member.userId : CART_KEY;
+}
+
+function readCartBy(key) {
+  try {
+    const list = JSON.parse(localStorage.getItem(key) || '[]');
+    return Array.isArray(list) ? list : [];
+  } catch (e) {
+    console.error('[장바구니] 저장된 내역을 읽지 못했습니다.', e);
+    return [];
+  }
+}
+
+function readCart() {
+  return readCartBy(cartKey());
+}
+
+function writeCart(list) {
+  localStorage.setItem(cartKey(), JSON.stringify(list));
+}
+
+/* 같은 상품 + 같은 옵션이면 수량만 더한다 */
+function mergeCartItem(list, item) {
+  const found = list.find(function (row) {
+    return row.slug === item.slug && String(row.size) === String(item.size);
+  });
+
+  if (found) found.qty += item.qty;
+  else list.push(item);
+
+  return list;
+}
+
+function addToCart(item) {
+  writeCart(mergeCartItem(readCart(), item));
+}
+
+/* 로그인 시 : 로그인 전에 담아둔 내역을 회원 장바구니로 합친다 */
+function mergeGuestCart(userId) {
+  const guest = readCartBy(CART_KEY);
+  if (!userId || !guest.length) return;
+
+  const key = CART_KEY + '_' + userId;
+  const mine = readCartBy(key);
+
+  guest.forEach(function (item) {
+    mergeCartItem(mine, item);
+  });
+
+  localStorage.setItem(key, JSON.stringify(mine));
+  localStorage.removeItem(CART_KEY);
+}
+
+/* 구매수량 설정 : '-  1  +' */
+function qtyBoxHtml(qty) {
+  return (
+    '<div class="qty-box">' +
+    '<button type="button" class="qty-minus font-pname" aria-label="수량 감소">-</button>' +
+    '<span class="qty-num font-pname">' + qty + '</span>' +
+    '<button type="button" class="qty-plus font-pname" aria-label="수량 증가">+</button>' +
+    '</div>'
+  );
+}
+
 /* ---------- 페이지 공통 초기화 ---------- */
 async function initLayout() {
   const headerSlot = document.getElementById('headerSlot');
@@ -224,6 +352,7 @@ async function initLayout() {
     document.body.appendChild(btn);
   }
 
+  initSubmenu();
   startPromoRolling();
   initScrollBehavior();
 

@@ -144,6 +144,9 @@ function openFindPwLayer() {
 
     sessionStorage.setItem('runnersMember', JSON.stringify({ userId: data.user_id, name: data.name }));
 
+    // 로그인 전에 담아둔 장바구니 내역을 회원 장바구니로 합친다
+    mergeGuestCart(data.user_id);
+
     if (data.password_change_recommended) {
       alert('마지막 비밀번호 변경 후 3개월이 지났습니다. 비밀번호를 변경해 주세요.');
     }

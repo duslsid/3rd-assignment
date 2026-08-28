@@ -14,7 +14,19 @@
 
   <main>
     <div class="container">
-      <div class="ready"><p class="font-content">페이지 작성중</p></div>
+      <div class="cart-wrap">
+        <!-- 구분선 하단이 장바구니 영역 -->
+        <div class="cart-area">
+          <div class="cart-line"></div>
+          <div class="cart-list" id="cartList"></div>
+        </div>
+
+        <!-- 구매총액 영역 -->
+        <aside class="cart-total">
+          <p class="cart-total-price font-price" id="cartTotalPrice">0 원</p>
+          <button type="button" class="cart-buy-btn font-submenu" id="cartBuyBtn">구매하기</button>
+        </aside>
+      </div>
     </div>
   </main>
 
@@ -24,6 +36,6 @@
   <script src="js/config.js"></script>
   <script src="js/db.js"></script>
   <script src="js/common.js"></script>
-  <script>initLayout();</script>
+  <script src="js/cart.js"></script>
 </body>
 </html>
