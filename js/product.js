@@ -18,12 +18,16 @@ function buildSizes(sizeCase) {
   return sizes;
 }
 
-/* 상품 미니 이미지 / 메인 상품 이미지 */
+/* 상품 미니 이미지 / 메인 상품 이미지
+   미니 이미지가 많으면 메인 이미지 높이를 넘기므로 파일명 순서대로 8개까지만 배치한다 */
+const THUMB_MAX = 8;
+
 function initImages(product) {
   const thumbBox = document.getElementById('detailThumbs');
   const mainImg = document.getElementById('detailMainImg');
 
   thumbBox.innerHTML = product.images
+    .slice(0, THUMB_MAX)
     .map(function (img, i) {
       return (
         '<img src="' + esc(img.url) + '" alt="' + esc(product.name) + ' 이미지 ' + (i + 1) + '"' +

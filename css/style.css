@@ -247,6 +247,11 @@ table {
   padding: 0 30px;
 }
 
+/* 메뉴바의 메뉴 글씨만 키운다 (스팟메뉴는 그대로) */
+.gnb-menu .font-menu {
+  font-size: 30px;
+}
+
 /* ---------- 하위 메뉴창 (메뉴 전체를 덮는 하나의 창) ---------- */
 .submenu {
   position: absolute;
@@ -343,7 +348,7 @@ table {
   margin-top: 100px;
   text-align: center;
   font-family: 'East Sea Dokdo', 'Noto Sans KR', sans-serif;
-  font-size: 60px;
+  font-size: 120px;
   font-weight: 700;
   color: var(--dark);
   letter-spacing: -0.02em;
@@ -1155,18 +1160,64 @@ table {
   padding: 100px;
   display: flex;
   flex-direction: column;
-  align-items: center;
+}
+
+/* 박스 상단 메뉴 : 메뉴 간 여백 100px */
+.mypage-menu {
+  display: flex;
   justify-content: center;
-  gap: 40px;
+  gap: 100px;
+  padding: 18px 0;
+  background: var(--dark);
 }
 
-.mypage-box button {
-  font-size: 15px;
-  font-weight: 300;
+.mypage-tab {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--white);
 }
 
-.mypage-box button:hover {
+.mypage-tab.on {
   text-decoration: underline;
+}
+
+/* 선택한 메뉴의 내용을 박스 안에서 보여준다 */
+.mypage-panel {
+  flex: 1;
+  margin-top: 40px;
+  overflow-y: auto;
+  line-height: 1.9;
+}
+
+.mypage-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 0;
+}
+
+.mypage-item img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  flex: 0 0 auto;
+}
+
+.mypage-item-text {
+  margin-left: 20px;
+  flex: 1;
+}
+
+.mypage-item-price {
+  flex: 0 0 auto;
+}
+
+.mypage-order {
+  padding: 12px 0;
+}
+
+.mypage-empty {
+  padding: 40px 0;
+  text-align: center;
 }
 
 /* =========================================================

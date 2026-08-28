@@ -16,10 +16,14 @@
     <div class="mypage">
       <h2 class="font-content mypage-name" id="myName">고객님</h2>
       <div class="mypage-box">
-        <button type="button" class="font-price" id="btnPoint">쿠폰/포인트</button>
-        <a class="font-price" href="wishlist.html">위시리스트</a>
-        <a class="font-price" href="cart.html">장바구니</a>
-        <a class="font-price" href="orders.html">주문/배송조회</a>
+        <!-- 박스 상단 메뉴 : 클릭하면 아래 영역에 내용이 나온다 -->
+        <div class="mypage-menu">
+          <button type="button" class="mypage-tab on" data-tab="point">쿠폰/포인트</button>
+          <button type="button" class="mypage-tab" data-tab="wish">위시리스트</button>
+          <button type="button" class="mypage-tab" data-tab="cart">장바구니</button>
+          <button type="button" class="mypage-tab" data-tab="orders">주문/배송조회</button>
+        </div>
+        <div class="mypage-panel" id="mypagePanel"></div>
       </div>
     </div>
   </main>
