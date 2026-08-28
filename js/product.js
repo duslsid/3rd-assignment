@@ -116,31 +116,46 @@ function initBuyBox(product) {
   };
 }
 
-/* 장바구니 담기 */
+/* 담을 상품 정보를 만든다. 사이즈를 골라야 하는 상품인데 고르지 않았으면 null */
+function pickItem(product, getQty) {
+  const selected = document.querySelector('.size-btn.selected');
+
+  if (buildSizes(product.size_case).length && !selected) {
+    alert('사이즈를 선택해 주세요.');
+    return null;
+  }
+
+  const main = product.images.find(function (i) {
+    return i.is_main;
+  });
+
+  return {
+    slug: product.slug,
+    name: product.name,
+    price: product.price,
+    image: main ? main.url : product.images.length ? product.images[0].url : '',
+    sizeCase: product.size_case,
+    size: selected ? selected.textContent : '',
+    qty: getQty(),
+  };
+}
+
+/* 장바구니 담기 / 위시리스트 담기 */
 function initCartButton(product, getQty) {
   document.querySelector('.btn-cart').addEventListener('click', function () {
-    const selected = document.querySelector('.size-btn.selected');
+    const item = pickItem(product, getQty);
+    if (!item) return;
 
-    if (buildSizes(product.size_case).length && !selected) {
-      alert('사이즈를 선택해 주세요.');
-      return;
-    }
-
-    const main = product.images.find(function (i) {
-      return i.is_main;
-    });
-
-    addToCart({
-      slug: product.slug,
-      name: product.name,
-      price: product.price,
-      image: main ? main.url : product.images.length ? product.images[0].url : '',
-      sizeCase: product.size_case,
-      size: selected ? selected.textContent : '',
-      qty: getQty(),
-    });
-
+    addToStore(CART_KEY, item);
     if (confirm('장바구니에 담았습니다. 장바구니로 이동하시겠습니까?')) location.href = 'cart.html';
+  });
+
+  document.getElementById('btnWish').addEventListener('click', function () {
+    const item = pickItem(product, getQty);
+    if (!item) return;
+
+    addToStore(WISH_KEY, item);
+    location.href = 'wishlist.html';
   });
 }
 
@@ -182,7 +197,7 @@ function initRecommend(all, currentSlug) {
   }
 
   list.innerHTML = pool
-    .slice(0, 4)
+    .slice(0, 6)
     .map(function (p) {
       return (
         '<a href="product.html?slug=' + encodeURIComponent(p.slug) + '">' +

@@ -59,10 +59,6 @@ function esc(text) {
 
 /* ---------- 헤더 ---------- */
 function renderHeader() {
-  const homeIcon =
-    '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="1.4">' +
-    '<path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.8V20h13V9.8"/><path d="M10 20v-5.5h4V20"/></svg>';
-
   const menuHtml = MENUS.map(function (m) {
     return (
       '<li class="menu-item">' +
@@ -91,7 +87,7 @@ function renderHeader() {
     '<div class="promo"><div class="promo-list">' + promoHtml + '</div></div>' +
     '<div class="header-line"></div>' +
     '<nav class="gnb">' +
-    '<a class="gnb-home" href="index.html" aria-label="메인 페이지">' + homeIcon + '</a>' +
+    '<a class="gnb-home" href="index.html" aria-label="메인 페이지"><img class="gnb-logo" id="gnbLogo" src="" alt="RUNNERS"></a>' +
     '<ul class="gnb-menu">' + menuHtml + '</ul>' +
     '<div class="submenu" id="submenu"><div class="submenu-inner">' + submenuHtml + '</div></div>' +
     '<div class="gnb-spot">' +
@@ -100,6 +96,8 @@ function renderHeader() {
     '<a class="font-menu" href="login.html">로그인</a>' +
     '<span class="font-menu bar">ㅣ</span>' +
     '<a class="font-menu" href="cart.html">장바구니</a>' +
+    '<span class="font-menu bar">ㅣ</span>' +
+    '<a class="font-menu" href="wishlist.html">위시리스트</a>' +
     '</div>' +
     '</nav>' +
     '</header>'
@@ -250,10 +248,11 @@ function closeLayer() {
 }
 
 /* =========================================================
-   장바구니 : 로그인 없이도 브라우저에 저장되고,
-   로그인하면 로그인 전에 담아둔 내역이 회원 장바구니로 합쳐진다.
+   장바구니 / 위시리스트 : 로그인 없이도 브라우저에 저장되고,
+   로그인하면 로그인 전에 담아둔 내역이 회원 보관함으로 합쳐진다.
    ========================================================= */
 const CART_KEY = 'runnersCart';
+const WISH_KEY = 'runnersWish';
 
 /* 로그인 정보 (세션 보관) */
 function getMember() {
@@ -266,31 +265,31 @@ function getMember() {
 }
 
 /* 비로그인은 공용 키, 로그인은 회원별 키를 사용한다 */
-function cartKey() {
+function storeKey(base) {
   const member = getMember();
-  return member && member.userId ? CART_KEY + '_' + member.userId : CART_KEY;
+  return member && member.userId ? base + '_' + member.userId : base;
 }
 
-function readCartBy(key) {
+function readStoreBy(key) {
   try {
     const list = JSON.parse(localStorage.getItem(key) || '[]');
     return Array.isArray(list) ? list : [];
   } catch (e) {
-    console.error('[장바구니] 저장된 내역을 읽지 못했습니다.', e);
+    console.error('[보관함] 저장된 내역을 읽지 못했습니다.', e);
     return [];
   }
 }
 
-function readCart() {
-  return readCartBy(cartKey());
+function readStore(base) {
+  return readStoreBy(storeKey(base));
 }
 
-function writeCart(list) {
-  localStorage.setItem(cartKey(), JSON.stringify(list));
+function writeStore(base, list) {
+  localStorage.setItem(storeKey(base), JSON.stringify(list));
 }
 
 /* 같은 상품 + 같은 옵션이면 수량만 더한다 */
-function mergeCartItem(list, item) {
+function mergeStoreItem(list, item) {
   const found = list.find(function (row) {
     return row.slug === item.slug && String(row.size) === String(item.size);
   });
@@ -301,24 +300,29 @@ function mergeCartItem(list, item) {
   return list;
 }
 
-function addToCart(item) {
-  writeCart(mergeCartItem(readCart(), item));
+function addToStore(base, item) {
+  writeStore(base, mergeStoreItem(readStore(base), item));
 }
 
-/* 로그인 시 : 로그인 전에 담아둔 내역을 회원 장바구니로 합친다 */
-function mergeGuestCart(userId) {
-  const guest = readCartBy(CART_KEY);
+/* 로그인 시 : 로그인 전에 담아둔 내역을 회원 보관함으로 합친다 */
+function mergeGuestStore(base, userId) {
+  const guest = readStoreBy(base);
   if (!userId || !guest.length) return;
 
-  const key = CART_KEY + '_' + userId;
-  const mine = readCartBy(key);
+  const key = base + '_' + userId;
+  const mine = readStoreBy(key);
 
   guest.forEach(function (item) {
-    mergeCartItem(mine, item);
+    mergeStoreItem(mine, item);
   });
 
   localStorage.setItem(key, JSON.stringify(mine));
-  localStorage.removeItem(CART_KEY);
+  localStorage.removeItem(base);
+}
+
+function mergeGuestCart(userId) {
+  mergeGuestStore(CART_KEY, userId);
+  mergeGuestStore(WISH_KEY, userId);
 }
 
 /* 구매수량 설정 : '-  1  +' */
@@ -357,6 +361,10 @@ async function initLayout() {
   initScrollBehavior();
 
   const assets = await fetchSiteAssets();
+
+  const gnbLogo = document.getElementById('gnbLogo');
+  if (gnbLogo) gnbLogo.src = assets.logo;
+
   if (footerSlot) footerSlot.innerHTML = renderFooter(assets.logo);
 
   return assets;

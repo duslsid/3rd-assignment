@@ -32,7 +32,7 @@ function toPreview(body) {
         '<img src="' + esc(a.image_url) + '" alt="' + esc(a.title) + '">' +
         '<div class="mag-row-text">' +
         '<p class="mag-row-title font-price">' + esc(a.title) + '</p>' +
-        '<p class="mag-row-preview font-pname">' + esc(preview) + '</p>' +
+        '<p class="mag-row-preview font-magazine">' + esc(preview) + '</p>' +
         '</div>' +
         '</a>'
       );

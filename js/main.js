@@ -6,7 +6,6 @@
    fadeIn 2초 -> 3초 유지 -> fadeOut 2초 를 무한 반복한다. */
 function initHero(banners) {
   const hero = document.getElementById('hero');
-  const logo = document.getElementById('heroLogo');
   if (!hero || !banners.length) return;
 
   const imgs = banners.map(function (src, i) {
@@ -15,7 +14,7 @@ function initHero(banners) {
     img.src = src;
     img.alt = '러너스 메인 배너 ' + (i + 1);
     img.style.transition = 'opacity 2s linear';
-    hero.insertBefore(img, logo);
+    hero.appendChild(img);
     return img;
   });
 
@@ -85,7 +84,7 @@ function initMagazine(articles) {
       return (
         '<a class="mag-card" href="article.html?slug=' + encodeURIComponent(a.slug) + '">' +
         '<img src="' + esc(a.image_url) + '" alt="' + esc(a.title) + '">' +
-        '<p class="mag-card-title font-price">' + esc(a.title) + '</p>' +
+        '<p class="mag-card-title">' + esc(a.title) + '</p>' +
         '</a>'
       );
     })
@@ -95,9 +94,6 @@ function initMagazine(articles) {
 /* ---------- 초기화 ---------- */
 (async function () {
   const assets = await initLayout();
-
-  const logo = document.getElementById('heroLogo');
-  if (logo) logo.src = assets.logo;
 
   initHero(assets.banners);
 
